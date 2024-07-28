@@ -24,7 +24,7 @@ public class DiskInfoUI extends JPanel {
         add(disk3Gauge);
         add(disk4Gauge);
 
-        JButton button = new JButton("Run PowerShell Script");
+        JButton button = new JButton("Refresh Values");
         button.addActionListener(e -> runPowerShellScript());
 
         add(button, BorderLayout.SOUTH);
