@@ -1,18 +1,11 @@
 ## Getting Started
 
-Welcome to the VS Code Java world. Here is a guideline to help you get started to write Java code in Visual Studio Code.
+With this project, you can learn your disk temperatures locally. 
 
 ## Folder Structure
 
 The workspace contains two folders by default, where:
 
-- `src`: the folder to maintain sources
-- `lib`: the folder to maintain dependencies
-
-Meanwhile, the compiled output files will be generated in the `bin` folder by default.
-
-> If you want to customize the folder structure, open `.vscode/settings.json` and update the related settings there.
-
-## Dependency Management
-
-The `JAVA PROJECTS` view allows you to manage your dependencies. More details can be found [here](https://github.com/microsoft/vscode-java-dependency#manage-dependencies).
+- On your desktop you must see your .csv file that named "output". This is a temp file and you can ignore or set the visible property to hidden.
+- On project's src path; you must see the GetDiskInfo.ps1 file. This file gets the temperatures from S.M.A.R.T data. This file is running automatically.
+- To run this project, your disks must send S.M.A.R.T data. Please check compatibility.
