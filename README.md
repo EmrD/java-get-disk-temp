@@ -1,10 +1,8 @@
 # Disk Temperature Dashboard
 
-![Java Logo](https://www.java.com/images/brand/JavaLogo_300x120.png)
-
 ## Overview
 
-The **Disk Temperature Dashboard** is a Java application that provides a visual representation of disk temperatures using speedometer-style gauges. This application reads disk temperature data from a CSV file and displays it using dynamic gauges that update in real-time.
+The **Disk Temperature App** is a Java application that provides a visual representation of disk temperatures using speedometer-style gauges. This application reads disk temperature data from a CSV file and displays it using dynamic gauges that update in real-time.
 
 ### Features
 
