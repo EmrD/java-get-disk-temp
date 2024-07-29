@@ -4,27 +4,27 @@ import java.awt.*;
 import java.io.*;
 import java.nio.file.*;
 import java.nio.file.attribute.FileTime;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DiskInfoUI extends JPanel {
-    private final Speedometer disk1Gauge;
-    private final Speedometer disk2Gauge;
-    private final Speedometer disk3Gauge;
-    private final Speedometer disk4Gauge;
+    private final Map<String, Speedometer> speedometerMap;
 
     public DiskInfoUI() {
         setLayout(new GridLayout(2, 2)); 
 
-        disk1Gauge = new Speedometer(0, 100, "Disk 0");
-        disk2Gauge = new Speedometer(0, 100, "Disk 1");
-        disk3Gauge = new Speedometer(0, 100, "Disk 2");
-        disk4Gauge = new Speedometer(0, 100, "Disk 3");
+        // Disk harflerini sıralı şekilde tanımla
+        speedometerMap = new HashMap<>();
+        speedometerMap.put("C", new Speedometer(0, 100, "C:"));
+        speedometerMap.put("D", new Speedometer(0, 100, "D:"));
+        speedometerMap.put("E", new Speedometer(0, 100, "E:"));
+        speedometerMap.put("F", new Speedometer(0, 100, "F:"));
 
-        add(disk1Gauge);
-        add(disk2Gauge);
-        add(disk3Gauge);
-        add(disk4Gauge);
+        for (Speedometer speedometer : speedometerMap.values()) {
+            add(speedometer);
+        }
 
-        JButton button = new JButton("Refresh Values");
+        JButton button = new JButton("Run PowerShell Script");
         button.addActionListener(e -> runPowerShellScript());
 
         add(button, BorderLayout.SOUTH);
@@ -72,13 +72,13 @@ public class DiskInfoUI extends JPanel {
                     String[] parts = line.split(",");
                     if (parts.length == 2) {
                         try {
-                            int deviceId = Integer.parseInt(parts[0].trim());
+                            String diskName = parts[0].trim();
                             int temperature = Integer.parseInt(parts[1].trim());
-                            switch (deviceId) {
-                                case 0 -> disk1Gauge.setValue(temperature);
-                                case 1 -> disk2Gauge.setValue(temperature);
-                                case 2 -> disk3Gauge.setValue(temperature);
-                                case 3 -> disk4Gauge.setValue(temperature);
+                            Speedometer speedometer = speedometerMap.get(diskName);
+                            if (speedometer != null) {
+                                speedometer.setValue(temperature);
+                            } else {
+                                System.out.println("Unknown disk name: " + diskName);
                             }
                         } catch (NumberFormatException ex) {
                             System.out.println("Error parsing line: " + line);
@@ -104,11 +104,13 @@ public class DiskInfoUI extends JPanel {
             return null;
         }
     }
+
     static class Speedometer extends JPanel {
         private int value;
         private final int minValue;
         private final int maxValue;
         private final String diskLabel;
+        private Color needleColor;
 
         public Speedometer(int minValue, int maxValue, String diskLabel) {
             this.minValue = minValue;
@@ -120,7 +122,18 @@ public class DiskInfoUI extends JPanel {
 
         public void setValue(int value) {
             this.value = Math.max(minValue, Math.min(maxValue, value));
+            updateNeedleColor();
             repaint();
+        }
+
+        private void updateNeedleColor() {
+            if (value <= 30) {
+                needleColor = Color.GREEN;
+            } else if (value <= 55) {
+                needleColor = Color.ORANGE;
+            } else {
+                needleColor = Color.RED;
+            }
         }
 
         @Override
@@ -142,7 +155,7 @@ public class DiskInfoUI extends JPanel {
             int x = centerX + (int) (pointerLength * Math.cos(radians));
             int y = centerY - (int) (pointerLength * Math.sin(radians));
 
-            g2d.setColor(Color.RED);
+            g2d.setColor(needleColor);
             g2d.setStroke(new BasicStroke(4));
             g2d.drawLine(centerX, centerY, x, y);
             g2d.setColor(Color.WHITE);
