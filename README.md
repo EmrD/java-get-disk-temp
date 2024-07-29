@@ -22,7 +22,7 @@ Before running the application, ensure that you have the following installed:
 1. **Navigate to the Project Directory**:
 
    ```bash
-   cd disk-temperature-dashboard
+   cd path/to/your/clone/dir
    ```
 
 2. **Compile and Run the Application**:
